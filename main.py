@@ -1,7 +1,7 @@
 # Using yahoo finance api
 import yfinance as yf
 from termcolor import colored
-from database.config import sqlConnection
+from db.config import sqlConnection
 from stock import Stock
 from dictionary import StockDictionary
 
@@ -94,14 +94,6 @@ def add_stock(stockDict):
         # Roll back in case of error
         sqlConnection.rollback()
 
-
-# def add_to_sql(stockDictList):
-#     for stockDict in stockDictList:
-#         try:
-#             add_stock(stockDict)
-#             print(colored(f"Successfully added {stockDict['Ticker']} to database!", "green"))
-#         except Exception as e:
-#             print(colored(f"Failed to add {stockDict['Ticker']}? + {str(e)}", "red"))
 
 def add_to_sql(stockDict):
     try:
