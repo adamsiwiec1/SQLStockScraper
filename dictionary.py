@@ -1,10 +1,9 @@
+import yfinance as yf
 
 
 class StockDictionary:
 
-    COLE = ["CLWD","CHUC","TLSS","PLYZ","NOK"]
-
-    NASDAQ = ["A", "AA", "AAA", "AAAU", "AACG", "AACQ", "AACQU", "AACQW", "AADR", "AAIC", "AAL", "AAMC", "AAME", "AAN",
+    STOCKS = ["CLWD","CHUC","TLSS","PLYZ", "A", "AA", "AAA", "AAAU", "AACG", "AACQ", "AACQU", "AACQW", "AADR", "AAIC", "AAL", "AAMC", "AAME", "AAN",
               "AAOI",
               "AAON", "AAP", "AAPL", "AAT", "AAU", "AAWW", "AAXJ", "AAXN", "AB", "ABB", "ABBV", "ABC", "ABCB", "ABCL",
               "ABCM",
@@ -1211,3 +1210,9 @@ class StockDictionary:
               "ZM", "ZNGA", "ZNH", "ZNTE", "ZNTEU", "ZNTEW", "ZNTL", "ZOM", "ZROZ", "ZS", "ZSAN", "ZSL", "ZTO", "ZTR",
               "ZTS",
               "ZUMZ", "ZUO", "ZVO", "ZYME", "ZYNE", "ZYXI"]
+
+
+# for ticker in StockDictionary().NASDAQ:
+#     stock = yf.Ticker(ticker)
+#
+#     print(stock.info['exchange'])
