@@ -68,3 +68,9 @@
 
 # create_infoDict_list(stocksList)
 # get_short_perc()
+
+
+# for ticker in StockDictionary().NASDAQ:
+#     stock = yf.Ticker(ticker)
+#
+#     print(stock.info['exchange'])

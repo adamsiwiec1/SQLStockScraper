@@ -1210,9 +1210,3 @@ class StockDictionary:
               "ZM", "ZNGA", "ZNH", "ZNTE", "ZNTEU", "ZNTEW", "ZNTL", "ZOM", "ZROZ", "ZS", "ZSAN", "ZSL", "ZTO", "ZTR",
               "ZTS",
               "ZUMZ", "ZUO", "ZVO", "ZYME", "ZYNE", "ZYXI"]
-
-
-# for ticker in StockDictionary().NASDAQ:
-#     stock = yf.Ticker(ticker)
-#
-#     print(stock.info['exchange'])
