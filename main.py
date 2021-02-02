@@ -35,16 +35,31 @@ def get_info(ticker):
         # exchange - sometimes not found (null)
         "Exchange": None,
 
+        # extra details - may not be found
+        'Country': None,
+        'Sector': None,
+        'Industry': None,
+        'TotalAssets': None,
+        '52WeekChange': None,
+        'LastDividendValue': None,
+        'PayoutRatio': None,
+        'ProfitMargins': None,
+
         # short details
         "FloatShares": None,
         "ShortShares": None,
         "SharesShortMonthAgo": None,
 
-        # # extra details (might not be there)
-        # "Employees": None,
-        # "Sector": None,
-        # "BookValue": None,
-        # "LastDividendValue": None
+        # # extra extra details
+        "Employees": None,
+        "BookValue": None,
+        'MorningStarRiskRating': None,
+        'EarningsQuarterlyGrowth': None,
+        'NetIncomeToCommon': None,
+        'SharesOutstanding': None,
+        "ShortRatio": None,
+        'Market': None,
+        'LongBusinessSummary': None
     }
 
     # Try to get exchange
@@ -52,6 +67,21 @@ def get_info(ticker):
         infoDict['Exchange'] = stock.info['exchange']
     except KeyError as e:
         print(f"Not able to pull exchange for '{stock.info['symbol']}'\n Exception: {e}\n")
+        pass
+
+    # Try to get extra details
+    try:
+        infoDict['Country'] = stock.info['country']
+        infoDict['Sector'] = stock.info['sector']
+        infoDict['Industry'] = stock.info['industry']
+        infoDict['TotalAssets'] = stock.info['totalAssets']
+        infoDict['FiftyTwoWeekChange'] = stock.info['52WeekChange']
+        infoDict['LastDividendValue'] = stock.info['lastDividendValue']
+        infoDict['PayoutRatio'] = stock.info['payoutRatio']
+        infoDict['ProfitMargins'] = stock.info['profitMargins']
+
+    except KeyError as e:
+        print(f"Not able to extra details for '{stock.info['symbol']}'\n Exception: {e}\n")
         pass
 
     # Try to populate short details
@@ -63,14 +93,19 @@ def get_info(ticker):
         print(colored(f"Not able to pull short details for '{stock.info['symbol']}'\n Exception: {e}\n", "red"))
         pass
 
-    # # Try to populate extra details
-    # try:
-    #     infoDict['Employees'] = stock.info['fullTimeEmployees']
-    #     infoDict['Sector'] = stock.info['sector']
-    #     infoDict['BookValue'] = stock.info['bookValue']
-    #     infoDict['LastDividendValue'] = stock.info['lastDividendValue']
-    # except KeyError as e:
-    #     print(f"Not able to pull extra extra details for '{stock.info['symbol']}'\n\n Exception: {e}")
+    # Try to populate extra details
+    try:
+        infoDict['Employees'] = stock.info['fullTimeEmployees']
+        infoDict['BookValue'] = stock.info['bookValue']
+        infoDict['MorningStarRiskRating'] = stock.info['morningStarRiskRating']
+        infoDict['EarningsQuarterlyGrowth'] = stock.info['earningsQuarterlyGrowth']
+        infoDict['NetIncomeToCommon'] = stock.info['netIncomeToCommon']
+        infoDict['SharesOutstanding'] = stock.info['sharesOutstanding']
+        infoDict['ShortRatio'] = stock.info['shortRatio']
+        infoDict['Market'] = stock.info['market']
+        infoDict['LongBusinessSummary'] = stock.info['longBusinessSummary']
+    except KeyError as e:
+        print(f"Not able to pull extra extra details for '{stock.info['symbol']}'\n\n Exception: {e}")
 
     return infoDict
 
