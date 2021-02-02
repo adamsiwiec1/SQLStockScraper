@@ -6,10 +6,11 @@ def short_finder(ticker):
 
     stock = yf.Ticker(ticker)
 
-    print(stock.info['symbol'])
-    print(stock.info['sharesShort'])
-    print(stock.info['floatShares'])
-    print(stock.info['sharesShortPreviousMonthDate'])
+    # print(stock.info['symbol'])
+    # print(stock.info['sharesShort'])
+    # print(stock.info['floatShares'])
+    # print(stock.info['sharesShortPreviousMonthDate'])
+    print(stock.info['TotalAssets'])
 
 
 if __name__ == "__main__":

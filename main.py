@@ -30,7 +30,6 @@ def get_info(ticker):
         "200DayAvg": stock.info['twoHundredDayAverage'],
         "AvgVolume": stock.info['averageVolume'],
         "10DayAvgVolume": stock.info['averageDailyVolume10Day'],
-        "YtdReturn": stock.info['ytdReturn'],
 
         # exchange - sometimes not found (null)
         "Exchange": None,
@@ -39,7 +38,6 @@ def get_info(ticker):
         'Country': None,
         'Sector': None,
         'Industry': None,
-        'TotalAssets': None,
         '52WeekChange': None,
         'LastDividendValue': None,
         'PayoutRatio': None,
@@ -53,7 +51,7 @@ def get_info(ticker):
         # # extra extra details
         "Employees": None,
         "BookValue": None,
-        'MorningStarRiskRating': None,
+        # 'MorningStarRiskRating': None,
         'EarningsQuarterlyGrowth': None,
         'NetIncomeToCommon': None,
         'SharesOutstanding': None,
@@ -74,7 +72,6 @@ def get_info(ticker):
         infoDict['Country'] = stock.info['country']
         infoDict['Sector'] = stock.info['sector']
         infoDict['Industry'] = stock.info['industry']
-        infoDict['TotalAssets'] = stock.info['totalAssets']
         infoDict['FiftyTwoWeekChange'] = stock.info['52WeekChange']
         infoDict['LastDividendValue'] = stock.info['lastDividendValue']
         infoDict['PayoutRatio'] = stock.info['payoutRatio']
@@ -97,7 +94,6 @@ def get_info(ticker):
     try:
         infoDict['Employees'] = stock.info['fullTimeEmployees']
         infoDict['BookValue'] = stock.info['bookValue']
-        infoDict['MorningStarRiskRating'] = stock.info['morningStarRiskRating']
         infoDict['EarningsQuarterlyGrowth'] = stock.info['earningsQuarterlyGrowth']
         infoDict['NetIncomeToCommon'] = stock.info['netIncomeToCommon']
         infoDict['SharesOutstanding'] = stock.info['sharesOutstanding']
@@ -115,12 +111,15 @@ def add_stock(stockDict):
 
     try:
         # Execute SQL Command
-        cursor.execute("INSERT INTO Stock VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (stockDict['Ticker'],
-                    stockDict['Exchange'], stockDict['Name'], stockDict['Price'], stockDict['Ask'], stockDict['Bid'],
-                    stockDict['DayLow'], stockDict['DayHigh'], stockDict['Volume'], stockDict['MarketOpen'],
+        cursor.execute("INSERT INTO Stock VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       , (stockDict['Ticker'], stockDict['Exchange'], stockDict['Name'], stockDict['Price'], stockDict['Ask'],
+                          stockDict['Bid'], stockDict['DayLow'], stockDict['DayHigh'], stockDict['Volume'], stockDict['MarketOpen'],
                     stockDict['MarketClose'], stockDict['52WeekLow'], stockDict['52WeekHigh'], stockDict['50DayAvg'],
-                    stockDict['200DayAvg'], stockDict['AvgVolume'], stockDict['10DayAvgVolume'], stockDict['YtdReturn'],
-                    stockDict['FloatShares'], stockDict['ShortShares'], stockDict['SharesShortMonthAgo']))
+                    stockDict['52WeekChange'], stockDict['200DayAvg'], stockDict['AvgVolume'], stockDict['10DayAvgVolume'],
+                    stockDict['Country'], stockDict['Sector'], stockDict['Industry'], stockDict['LastDividendValue'],
+                    stockDict['PayoutRatio'], stockDict['ProfitMargins'], stockDict['FloatShares'], stockDict['ShortShares'],
+                    stockDict['SharesShortMonthAgo'], stockDict['Employees'], stockDict['BookValue'], stockDict['EarningsQuarterlyGrowth'],
+                    stockDict['NetIncomeToCommon'], stockDict['SharesOutstanding'], stockDict['ShortRatio'], stockDict['Market'], stockDict['LongBusinessSummary']))
 
         # Commit Changes to SQL Database
         sqlConnection.commit()
