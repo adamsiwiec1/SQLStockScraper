@@ -5,7 +5,10 @@ from db.config import sqlConnection
 from stock import Stock
 from dictionary import StockDictionary
 import datetime
+from time import perf_counter
+from etc import smsAlert
 
+# THIS SCRIPT TAKES ABOUT 7 HOURS - 8 HOURS TO RUN
 
 def get_info(ticker):
     stock = yf.Ticker(ticker)
@@ -143,9 +146,13 @@ def create_stock_objects(tickers):
     stockList = []
     for ticker in tickers:
         try:
+            t0 = perf_counter()
             stockDict = get_info(ticker)
             stockList.append(stockDict)
             print(colored(f"{ticker} was added to objects!", "green"))
+            t1 = perf_counter()
+            completion_time = t1 - t0
+            print("Completion time: ", completion_time)
             add_to_sql(stockDict)
         except Exception as e:
             print(colored(f"{ticker} was not added to objects\n Exception: {str(e)}", "red"))
@@ -156,5 +163,9 @@ def create_stock_objects(tickers):
 
 
 if __name__ == "__main__":
+    t0 = perf_counter()
     stockList = create_stock_objects(StockDictionary.STOCKS)
-    # add_to_sql(stockList)
+    t1 = perf_counter()
+    completion_time = t1 - t0
+    print("Completion time: ", t1 - t0)
+    smsAlert.sendsms_on_completion(completion_time)
