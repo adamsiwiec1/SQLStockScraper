@@ -4,6 +4,7 @@ from termcolor import colored
 from db.config import sqlConnection
 from stock import Stock
 from dictionary import StockDictionary
+import datetime
 
 
 def get_info(ticker):
@@ -14,6 +15,7 @@ def get_info(ticker):
         # current
         "Ticker": stock.info['symbol'],
         "Name": stock.info['longName'],
+        "DateTimePulled": datetime.datetime.now(),
         "Price": stock.info['regularMarketPrice'],
         "Ask": stock.info['ask'],
         "Bid": stock.info['bid'],
@@ -64,7 +66,7 @@ def get_info(ticker):
     try:
         infoDict['Exchange'] = stock.info['exchange']
     except KeyError as e:
-        print(f"Not able to pull exchange for '{stock.info['symbol']}'\n Exception: {e}\n")
+        print(colored(f"Not able to pull exchange for '{stock.info['symbol']}", "red"))
         pass
 
     # Try to get extra details
@@ -78,7 +80,7 @@ def get_info(ticker):
         infoDict['ProfitMargins'] = stock.info['profitMargins']
 
     except KeyError as e:
-        print(f"Not able to extra details for '{stock.info['symbol']}'\n Exception: {e}\n")
+        print(colored(f"Not able to extra details for '{stock.info['symbol']}'\n Exception: {e}\n"))
         pass
 
     # Try to populate short details
@@ -111,8 +113,8 @@ def add_stock(stockDict):
 
     try:
         # Execute SQL Command
-        cursor.execute("INSERT INTO Stock VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                       , (stockDict['Ticker'], stockDict['Exchange'], stockDict['Name'], stockDict['Price'], stockDict['Ask'],
+        cursor.execute("INSERT INTO Stock VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       , (stockDict['Ticker'], stockDict['Exchange'], stockDict['Name'], stockDict['DateTimePulled'], stockDict['Price'], stockDict['Ask'],
                           stockDict['Bid'], stockDict['DayLow'], stockDict['DayHigh'], stockDict['Volume'], stockDict['MarketOpen'],
                     stockDict['MarketClose'], stockDict['52WeekLow'], stockDict['52WeekHigh'], stockDict['50DayAvg'],
                     stockDict['52WeekChange'], stockDict['200DayAvg'], stockDict['AvgVolume'], stockDict['10DayAvgVolume'],
