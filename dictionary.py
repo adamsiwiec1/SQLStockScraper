@@ -1,5 +1,22 @@
 import yfinance as yf
+# ASE - NYSEAMERICAN
+# NYQ - NYSE
+# NCM - NASDAQ
+# NGM - NASDAQ - mostly? + EPA
+# BTS - BATS/LON
+# PCX - NYSEARCA/FRA
+# PNK - COLE
+# NMS - NASDAQ
 
+def normalize_exchange(exchange):
+    if exchange == 'NMS' or 'NCM' or 'NGM':
+        return 'NASDAQ'
+    if exchange == 'PCX':
+        return 'NYSEARCA'
+    if exchange == 'BTS':
+        return 'BATS'
+    if exchange == 'PNK':
+        return 'OTCMKTS'
 
 class StockDictionary:
 

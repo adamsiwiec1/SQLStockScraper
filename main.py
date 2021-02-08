@@ -1,9 +1,9 @@
 # Using yahoo finance api
 import yfinance as yf
-from termcolor import colored
+from colorama import Fore, Back, Style, init
 from db.config import sqlConnection
 from stock import Stock
-from dictionary import StockDictionary
+from dictionary import StockDictionary, normalize_exchange
 import datetime
 from time import perf_counter
 from etc import smsAlert
@@ -69,7 +69,7 @@ def get_info(ticker):
     try:
         infoDict['Exchange'] = stock.info['exchange']
     except KeyError as e:
-        print(colored(f"Not able to pull exchange for '{stock.info['symbol']}", "red"))
+        print(Fore.RED + f"Not able to pull exchange for '{stock.info['symbol']}")
         pass
 
     # Try to get extra details
@@ -83,7 +83,7 @@ def get_info(ticker):
         infoDict['ProfitMargins'] = stock.info['profitMargins']
 
     except KeyError as e:
-        print(colored(f"Not able to extra details for '{stock.info['symbol']}'\n Exception: {e}\n"))
+        print(Fore.RED + f"Not able to extra details for '{stock.info['symbol']}'\n Exception: {e}\n")
         pass
 
     # Try to populate short details
@@ -92,7 +92,7 @@ def get_info(ticker):
         infoDict['ShortShares'] = stock.info['sharesShort']
         infoDict['SharesShortMonthAgo'] = stock.info['sharesShortPreviousMonthDate']
     except KeyError as e:
-        print(colored(f"Not able to pull short details for '{stock.info['symbol']}'\n Exception: {e}\n", "red"))
+        print(Fore.RED + f"Not able to pull short details for '{stock.info['symbol']}'\n Exception: {e}\n")
         pass
 
     # Try to populate extra details
@@ -116,8 +116,8 @@ def add_stock(stockDict):
 
     try:
         # Execute SQL Command
-        cursor.execute("INSERT INTO Stock VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                       , (stockDict['Ticker'], stockDict['Exchange'], stockDict['Name'], stockDict['DateTimePulled'], stockDict['Price'], stockDict['Ask'],
+        cursor.execute("INSERT INTO Stock VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                       , (stockDict['Ticker'], stockDict['Exchange'], normalize_exchange(stockDict['Exchange']), stockDict['Name'], stockDict['DateTimePulled'], stockDict['Price'], stockDict['Ask'],
                           stockDict['Bid'], stockDict['DayLow'], stockDict['DayHigh'], stockDict['Volume'], stockDict['MarketOpen'],
                     stockDict['MarketClose'], stockDict['52WeekLow'], stockDict['52WeekHigh'], stockDict['50DayAvg'],
                     stockDict['52WeekChange'], stockDict['200DayAvg'], stockDict['AvgVolume'], stockDict['10DayAvgVolume'],
@@ -129,7 +129,7 @@ def add_stock(stockDict):
         # Commit Changes to SQL Database
         sqlConnection.commit()
     except Exception as e:
-        print(colored(f"Failed to add {stockDict['Ticker']} + {str(e)}?", "red"))
+        print(Fore.RED + f"Failed to add {stockDict['Ticker']} + {str(e)}?")
         # Roll back in case of error
         sqlConnection.rollback()
 
@@ -137,9 +137,9 @@ def add_stock(stockDict):
 def add_to_sql(stockDict):
     try:
         add_stock(stockDict)
-        print(colored(f"Successfully added {stockDict['Ticker']} to database!", "green"))
+        print(Fore.GREEN + f"Successfully added {stockDict['Ticker']} to database!")
     except Exception as e:
-        print(colored(f"Failed to add {stockDict['Ticker']}? + {str(e)}", "red"))
+        print(Fore.RED + f"Failed to add {stockDict['Ticker']}? + {str(e)}")
 
 
 def create_stock_objects(tickers):
@@ -149,13 +149,13 @@ def create_stock_objects(tickers):
             t0 = perf_counter()
             stockDict = get_info(ticker)
             stockList.append(stockDict)
-            print(colored(f"{ticker} was added to objects!", "green"))
+            print(Fore.GREEN + f"{ticker} was added to objects!")
             t1 = perf_counter()
             completion_time = t1 - t0
             print("Completion time: ", completion_time)
             add_to_sql(stockDict)
         except Exception as e:
-            print(colored(f"{ticker} was not added to objects\n Exception: {str(e)}", "red"))
+            print(Fore.RED + f"{ticker} was not added to objects\n Exception: {str(e)}")
             pass
 
     if stockList:

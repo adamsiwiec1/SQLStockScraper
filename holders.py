@@ -1,7 +1,7 @@
 from urllib.error import HTTPError
 
 import yfinance as yf
-from termcolor import colored
+from colorama import Fore, Back, Style, init
 from db.config import sqlConnection
 from stock import Stock
 from dictionary import StockDictionary
@@ -32,12 +32,12 @@ def print_holders(ticker):
             if "Previous Close" not in stock.major_holders[0][0]:
                 print(stock.major_holders)
             else:
-                print(colored(f"Bid and ask were found for {ticker}", "red"))
+                print(Fore.RED + f"Bid and ask were found for {ticker}")
         else:
-            print(colored(f"No data for {ticker}", "red"))
+            print(Fore.RED + f"No data for {ticker}", "red")
     except TypeError:
         pass
-        print(colored(f"Whatever a numpy float is, it's not iterable. {ticker} failed to add."))
+        print(Fore.RED + f"Whatever a numpy float is, it's not iterable. {ticker} failed to add.")
 
     # get_perc_holder(stock.major_holders)
 
@@ -52,6 +52,6 @@ if __name__ == "__main__":
                 print("Error: VALUE ERROR:" + str(e))
                 pass
     except HTTPError:
-        print(colored('Error: HTTP ERROR'), "red")
+        print(Fore.RED + 'Error: HTTP ERROR')
         pass
 
