@@ -1,14 +1,13 @@
 # Using yahoo finance api
 import yfinance as yf
-from colorama import Fore, Back, Style, init
 from db.config import sqlConnection
-from stock import Stock
 from dictionary import StockDictionary, normalize_exchange
 import datetime
 from time import perf_counter
 from etc import smsAlert
 
 # THIS SCRIPT TAKES ABOUT 7 HOURS - 8 HOURS TO RUN
+
 
 def get_info(ticker):
     stock = yf.Ticker(ticker)
@@ -69,7 +68,7 @@ def get_info(ticker):
     try:
         infoDict['Exchange'] = stock.info['exchange']
     except KeyError as e:
-        print(Fore.RED + f"Not able to pull exchange for '{stock.info['symbol']}")
+        print(f"Not able to pull exchange for '{stock.info['symbol']}")
         pass
 
     # Try to get extra details
@@ -83,7 +82,7 @@ def get_info(ticker):
         infoDict['ProfitMargins'] = stock.info['profitMargins']
 
     except KeyError as e:
-        print(Fore.RED + f"Not able to extra details for '{stock.info['symbol']}'\n Exception: {e}\n")
+        print(f"Not able to extra details for '{stock.info['symbol']}'")  # \n Exception: {e}\n")
         pass
 
     # Try to populate short details
@@ -92,7 +91,7 @@ def get_info(ticker):
         infoDict['ShortShares'] = stock.info['sharesShort']
         infoDict['SharesShortMonthAgo'] = stock.info['sharesShortPreviousMonthDate']
     except KeyError as e:
-        print(Fore.RED + f"Not able to pull short details for '{stock.info['symbol']}'\n Exception: {e}\n")
+        print(f"Not able to pull short details for '{stock.info['symbol']}'")  # \n Exception: {e}\n")
         pass
 
     # Try to populate extra details
@@ -106,7 +105,7 @@ def get_info(ticker):
         infoDict['Market'] = stock.info['market']
         infoDict['LongBusinessSummary'] = stock.info['longBusinessSummary']
     except KeyError as e:
-        print(f"Not able to pull extra extra details for '{stock.info['symbol']}'\n\n Exception: {e}")
+        print(f"Not able to pull extra extra details for '{stock.info['symbol']}'")  # \n\n Exception: {e}")
 
     return infoDict
 
@@ -129,7 +128,7 @@ def add_stock(stockDict):
         # Commit Changes to SQL Database
         sqlConnection.commit()
     except Exception as e:
-        print(Fore.RED + f"Failed to add {stockDict['Ticker']} + {str(e)}?")
+        # print(f"Failed to add '{stockDict['Ticker']}'")  # + {str(e)}?")
         # Roll back in case of error
         sqlConnection.rollback()
 
@@ -137,25 +136,25 @@ def add_stock(stockDict):
 def add_to_sql(stockDict):
     try:
         add_stock(stockDict)
-        print(Fore.GREEN + f"Successfully added {stockDict['Ticker']} to database!")
+        print(f"Successfully added {stockDict['Ticker']} to database!")
     except Exception as e:
-        print(Fore.RED + f"Failed to add {stockDict['Ticker']}? + {str(e)}")
+        print(f"Failed to add {stockDict['Ticker']} to database! + {str(e)}")
 
 
 def create_stock_objects(tickers):
     stockList = []
     for ticker in tickers:
         try:
-            t0 = perf_counter()
+            # t0 = perf_counter()
             stockDict = get_info(ticker)
             stockList.append(stockDict)
-            print(Fore.GREEN + f"{ticker} was added to objects!")
-            t1 = perf_counter()
-            completion_time = t1 - t0
-            print("Completion time: ", completion_time)
+            # print(f"{ticker} was added to objects!")
+            # t1 = perf_counter()
+            # completion_time = t1 - t0
+            # print("Completion time: ", completion_time)
             add_to_sql(stockDict)
         except Exception as e:
-            print(Fore.RED + f"{ticker} was not added to objects\n Exception: {str(e)}")
+            print(f"{ticker} was not added to objects.")  # \n Exception: {str(e)}")
             pass
 
     if stockList:
