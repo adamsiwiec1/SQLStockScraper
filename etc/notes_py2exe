@@ -1,0 +1,16 @@
+# http://www.py2exe.org/index.cgi/Tutorial
+
+1. Create a setup.py file in your project:
+
+   1 from distutils.core import setup
+   2 import py2exe
+   3
+   4 setup(console=['hello.py'])
+
+2. Then run this command:
+
+   python setup.py install
+
+3. Run the setup script with py2exe: (all of this done in venv)
+
+    python setup.py py2exe
